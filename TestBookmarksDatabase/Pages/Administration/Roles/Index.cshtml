@@ -1,0 +1,52 @@
+﻿@page
+@using TestBookmarksDatabase.ViewModels
+@model TestBookmarksDatabase.Administration.Roles.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Roles</h1>
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<form asp-page="./Index" method="get" class="form-inline">
+    <label class="sr-only" for="Search">Filter</label>
+    <input type="text" class="form-control mb-2 mr-sm-2" asp-for="@Model.SearchFilter" />
+    @*<select class="form-control mb-2 mr-sm-2" asp-for="@Model.OwnerFilter" asp-items="@Model.UserList">
+        <option value="">-- all --</option>
+    </select>*@
+    @*<input type="hidden" asp-"for="@Model.Order" />*@
+    <input type="submit" value="Search" class="btn btn-primary mb-2 mr-1" /> <a asp-page="./Index" class="btn btn-secondary mb-2">All</a>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @*@if (Model.Order == BookmarkListOrder.Title)
+                {
+                    <a asp-route-order="@BookmarkListOrder.TitleDescending" asp-route-searchFilter="@Model.SearchFilter">@Html.DisplayNameFor(model => model.Bookmarks[0].Title)</a>
+                }
+                else
+                {
+                    <a asp-route-order="@BookmarkListOrder.Title" asp-route-searchFilter="@Model.SearchFilter">@Html.DisplayNameFor(model => model.Bookmarks[0].Title)</a>
+                }*@
+                <a>@Html.DisplayNameFor(model => model.RoleList[0].Name)</a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.RoleList) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                <a class="btn btn-info" asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                <a class="btn btn-danger" asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
