@@ -31,6 +31,7 @@ namespace TestBookmarksDatabase
         }
 
         public IConfiguration Configuration { get; }
+        
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -38,7 +39,31 @@ namespace TestBookmarksDatabase
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddIdentity<IdentityUser<Guid>,IdentityRole<Guid>>(options =>
+        services.ConfigureApplicationCookie(options =>
+        {
+
+
+            options.LoginPath = $"/Identity/Account/Login";
+
+
+            options.LogoutPath = $"/Identity/Account/Logout";
+
+
+            options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+            services.AddAuthentication()
+
+
+            .AddMicrosoftAccount(options =>
+            {
+                options.ClientId = Configuration["Authentication:Microsoft:ClientId"];
+                options.ClientSecret = Configuration["Authentication:Microsoft:ClientSecret"];
+            })
+
+
+            ;
+        });
+
+        services.AddIdentity<IdentityUser<Guid>,IdentityRole<Guid>>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = true;
                 options.Password.RequiredLength = 6;
